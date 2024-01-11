@@ -10,9 +10,11 @@ import { BsLink45Deg } from "react-icons/bs"
 import Title from "antd/es/typography/Title";
 import ActionButton from "../components/ActionButton";
 import { IoAddCircle } from "react-icons/io5";
+import { RoomContext } from "../contexts/RoomContext";
 
 const Room = () => {
-  const { user } = useContext(AuthContext);
+  const { user, } = useContext(AuthContext);
+  const { setUserPeer, } = useContext(RoomContext);
   const { roomId } = useParams()
   const navigate = useNavigate();
   const baseUrl = window.location.origin;
@@ -34,7 +36,7 @@ const Room = () => {
           const userRooms = await getUserRooms(user.data.id);
           setUserRooms(userRooms)
           console.log('userRooms', userRooms)
-
+          setUserPeer(user.data)
         }
       } catch (error) {
         console.log(error);
@@ -83,7 +85,7 @@ const Room = () => {
                 prefix={<BsLink45Deg size={24} />} size="large"
                 className=" outline-violet-400 focub" readOnly />
               <ActionButton text={isCopied ? 'Copied' : 'Copy'} color="violet" onClick={handleCopy} />
-              <Link to={'/join'}><ActionButton text="Start"/>
+              <Link to={`join`}><ActionButton text="Start"/>
 </Link>
             </div>
           </div>

@@ -29,16 +29,16 @@ const routes = (isAuthenticated: boolean):RouteType[] => [
       element: <SignUp />
     },
     {
-      path: '/join',
-      element: <Conference/>
-    },
-    {
       path: '/new',
       element: <NewRoom/>
     },
     {
       path: '/:roomId',
       element: <Room/>
+    },
+    {
+      path: '/:roomId/join',
+      element: <Conference/>
     },
   ];
   

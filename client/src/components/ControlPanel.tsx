@@ -5,17 +5,23 @@ import MicButton from './MicButton'
 import ParticipantButton from './ParticipantButton'
 import ScreenShareButton from './ScreenShareButton'
 
-const ControlPanel = () => {
+interface ControlPanelProps {
+  toggleMic: () => void;
+  toggleCamera: () => void;
+  toggleScreen: () => void;
+  endCall: () => void;
+}
+const ControlPanel: React.FC<ControlPanelProps> = ({toggleCamera, toggleMic, toggleScreen, endCall}) => {
   return (
 
       <div className=" flex flex-row justify-between ">
         <ParticipantButton />
 
         <div className=' flex flex-row items-center justify-between gap-x-5'>
-          <MicButton />
-          <CameraButton />
-          <ScreenShareButton />
-          <EndCallButton />
+          <MicButton toggleMic={toggleMic}/>
+          <CameraButton toggleCamera={toggleCamera}/>
+          <ScreenShareButton toggleScreen={toggleScreen}/>
+          <EndCallButton handleEnd={endCall}/>
         </div>
 
         <MessageButton />

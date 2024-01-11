@@ -1,17 +1,20 @@
 import { Tooltip } from 'antd'
-import { useState } from 'react'
+import { useContext } from 'react'
 import { MdScreenShare, MdStopScreenShare } from 'react-icons/md'
+import { RoomContext } from '../contexts/RoomContext';
 
-const ScreenShareButton = () => {
-    const [isShared, setIsShared] = useState(true);
 
-    const toggleMute = () => {
-        setIsShared((prev) => !prev)
-    }
+interface ScreenButtonProps {
+  toggleScreen: () => void;
+}
+const ScreenShareButton: React.FC<ScreenButtonProps> = ({toggleScreen}) => {
+  const {isScreenShareOn} = useContext(RoomContext)
+
+
   return (
-    <Tooltip placement='top' title={isShared? "Share your screen" : "Stop sharing your screen"}>
-    <div onClick={toggleMute} className={`rounded-full h-12 w-12 
-  flex flex-row items-center justify-center text-xl cursor-pointer ${isShared ? "bg-slate-800" : "bg-blue-700" }`}>{isShared ? <MdStopScreenShare/> : <MdScreenShare/> }</div>
+    <Tooltip placement='top' title={isScreenShareOn? "Share your screen" : "Stop sharing your screen"}>
+    <div onClick={toggleScreen} className={`rounded-full h-12 w-12 
+  flex flex-row items-center justify-center text-xl cursor-pointer ${isScreenShareOn ? "bg-slate-800" : "bg-blue-700" }`}>{isScreenShareOn ? <MdStopScreenShare/> : <MdScreenShare/> }</div>
     </Tooltip>
   )
 }

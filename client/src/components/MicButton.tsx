@@ -1,17 +1,17 @@
 import { Tooltip } from 'antd'
-import { useState } from 'react'
+import { useContext } from 'react'
 import { BsMicFill, BsMicMuteFill } from 'react-icons/bs'
+import { RoomContext } from '../contexts/RoomContext';
 
-const MicButton = () => {
-    const [isMuted, setIsMuted] = useState(true);
-
-    const toggleMute = () => {
-        setIsMuted((prev) => !prev)
-    }
+interface MicButtonProps {
+  toggleMic: () => void;
+}
+const MicButton: React.FC<MicButtonProps> = ({toggleMic}) => {
+  const {isMicOn} = useContext(RoomContext)
   return (
-    <Tooltip placement='top' title={isMuted? "Unmute" : "Mute"}>
-    <div onClick={toggleMute} className={`rounded-full h-12 w-12 
-  flex flex-row items-center justify-center text-xl cursor-pointer ${isMuted ? "bg-slate-800" : "bg-blue-700" }`}>{isMuted ? <BsMicMuteFill/> : <BsMicFill/>}</div>
+    <Tooltip placement='top' title={isMicOn? "Unmute" : "Mute"}>
+    <div onClick={toggleMic} className={`rounded-full h-12 w-12 
+  flex flex-row items-center justify-center text-xl cursor-pointer ${isMicOn ? "bg-slate-800" : "bg-blue-700" }`}>{isMicOn ? <BsMicMuteFill/> : <BsMicFill/>}</div>
     </Tooltip>
   )
 }
