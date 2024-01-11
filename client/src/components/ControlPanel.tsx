@@ -8,8 +8,7 @@ import ScreenShareButton from './ScreenShareButton'
 const ControlPanel = () => {
   return (
 
-    <div >
-      <div className=" flex flex-row justify-between mb-2 container mx-auto">
+      <div className=" flex flex-row justify-between ">
         <ParticipantButton />
 
         <div className=' flex flex-row items-center justify-between gap-x-5'>
@@ -21,7 +20,6 @@ const ControlPanel = () => {
 
         <MessageButton />
       </div>
-    </div>
   )
 }
 
