@@ -1,5 +1,7 @@
 import { Avatar, Card } from 'antd'
+import { useContext } from 'react'
 import {IoSend} from 'react-icons/io5'
+import { RoomContext } from '../contexts/RoomContext'
 const Chat = () => {
     return (
         <div className='flex flex-row gap-x-2'>
@@ -12,9 +14,13 @@ const Chat = () => {
         </div>
     )
 }
+
+
 const ChatPanel = () => {
+    const {showChat} = useContext(RoomContext)
+
   return (
-    <Card title="Public chat"  size="small" className=' flex flex-col h-full w-72'>
+    <Card title="Public chat"  size="small" className={`flex flex-col h-full w-72 ${showChat ? '' : 'hidden'}`}>
     <div className='flex flex-col justify-between'>
         <div className=' flex-grow-1'>
             {[1,2,3,4].map((item) => <Chat key={item} />)}

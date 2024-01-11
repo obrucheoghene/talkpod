@@ -65,12 +65,12 @@ const ActivityBoard = () => {
     const gridClass = getGridClass(participants.length);
 
     return (
-        <Card size="small" className='flex-grow-1 flex flex-col bg-neutral-900  border-none text-white h-full overflow-auto'>
-            <div className={twMerge(`grid ${gridClass} gap-2 p-2  max-h-full w`)}>
+        <Card size="small" className='flex-grow-1 flex flex-col bg-neutral-8d00 border-none text-white overflow-hidden'>
+            {/* <div className={twMerge(`grid ${gridClass} gap-2 max-h-full w`)}>
                 {participants.map((_participant, index) => (
                     <Participant key={index}/>
                 ))}
-            </div>
+            </div> */}
         </Card>
     )
 }
