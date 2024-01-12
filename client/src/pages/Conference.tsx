@@ -6,10 +6,12 @@ import ControlPanel from '../components/ControlPanel'
 import ParticipantPanel from '../components/ParticipantPanel'
 import { Device, types as mediasoupTypes  } from 'mediasoup-client'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Room as RoomValue } from '../utils/types';
+import { Peer, Room as RoomValue } from '../utils/types';
 import { getRoomById } from '../utils/helpers'
 import { RoomContext } from '../contexts/RoomContext'
 import { SOCKET_EVENT_TYPES as SE } from '../utils/constants';
+import { useAppDispatch, useAppSelector } from '../hooks/redux'
+import { addPeer, removePeer, updatePeer } from '../reducers/peerSlice'
 
 // import ParticipantPanel from '../components/ParticipantPanel'
 // import ChatPanel from '../components/ChatPanel'
@@ -25,17 +27,184 @@ const Conference = () => {
 
 
   const device = useRef<mediasoupTypes.Device>();
-  // const sendTransport = useRef<mediasoupTypes.Transport>();
-  // const recvTransports = useRef<Map<string, mediasoupTypes.Transport>>(new Map());
-  // const consumers = useRef<Map<string, mediasoupTypes.Consumer>>(new Map());
-  // const producers = useRef<Map<string, mediasoupTypes.Producer>>(new Map());
-  // const { roomId } = useParams()
-  // const producerSourceIds = useRef<Map<string, string>>(new Map())
-  // const [isReady, setIsReady] = useState(false);
-  // const dispatch = useAppDispatch();
+  const sendTransport = useRef<mediasoupTypes.Transport>();
+  const recvTransports = useRef<Map<string, mediasoupTypes.Transport>>(new Map());
+  const consumers = useRef<Map<string, mediasoupTypes.Consumer>>(new Map());
+  const producers = useRef<Map<string, mediasoupTypes.Producer>>(new Map());
+  const producerSourceIds = useRef<Map<string, string>>(new Map())
+  const dispatch = useAppDispatch();
+  const peers = useAppSelector((state) => state.peers)
+  // const chats = useAppSelector((state) => state.chats)
+
+  const toggleCamera = async () => {
+    if (isCameraOn) {
+      await offCamera()
+    } else {
+      await onCamera()
+    }
+    setIsCameraOn(!isCameraOn);
+  }
 
 
-  const leaveRoom = () => {
+  const onCamera = async () => {
+    console.log('Oncamera')
+    if (!userPeer) return
+
+    try {
+      const userStream = await navigator.mediaDevices.getUserMedia({ video: { width: { min: 1280 }, height: { min: 720 } } });
+
+ 
+      if (!sendTransport.current) return;
+
+      // const canvasStream = canvasRef.current.captureStream()
+      dispatch(updatePeer({ ...peers[userPeer.id], video: userStream }))
+      const producer = await sendTransport.current.produce({ track: userStream.getVideoTracks()[0], appData: { source: 'camera' } })
+      producerSourceIds.current.set('camera', producer.id);
+      producers.current.set(producer.id, producer);
+
+      console.log('producers.current', producers.current)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const offCamera = async () => {
+    console.log("OFF Camera")
+    if (!userPeer) return
+
+    peers[userPeer.id].video?.getTracks().forEach(track => {
+      track.stop();
+    })
+    dispatch(updatePeer({ ...peers[userPeer.id], video: undefined }))
+    // getProducer
+    console.log('producers.current', producers.current)
+    const producerId = producerSourceIds.current.get('camera');
+    if (!producerId) return
+
+    const producer = producers.current.get(producerId);
+    if (!producer) {
+      console.log("Producer was not found");
+      return
+    }
+    producers.current.delete(producer.id);
+    producer.close();
+    await emitRequest(SE.producerClosed, { producerId: producer.id })
+
+  }
+
+  const toggleScreen = async () => {
+    if (isScreenShareOn) {
+      await stopScreenShare()
+    } else {
+      await startScreenShare()
+    }
+    setIsScreenShareOn(!isScreenShareOn);
+  }
+
+
+  const stopScreenShare = async () => {
+    console.log("stopScreenShare")
+    if (!userPeer) return
+
+    peers[userPeer.id].screen?.getTracks().forEach(track => {
+      track.stop();
+    })
+    dispatch(updatePeer({ ...peers[userPeer.id], screen: undefined }))
+    // getProducer
+    console.log('producers.current', producers.current)
+    const producerId = producerSourceIds.current.get('screen');
+    if (!producerId) return
+
+    const producer = producers.current.get(producerId);
+    if (!producer) {
+      console.log("Producer was not found");
+      return
+    }
+    producers.current.delete(producer.id);
+    producer.close();
+    await emitRequest(SE.producerClosed, { producerId: producer.id })
+  }
+
+  const startScreenShare = async () => {
+    console.log('Start Screen Share')
+    if (!userPeer) return
+
+    try {
+      const userStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+
+      if (!sendTransport.current) return;
+
+      dispatch(updatePeer({ ...peers[userPeer.id], screen: userStream }))
+
+      const producer = await sendTransport.current.produce({ track: userStream.getVideoTracks()[0], appData: { source: 'screen' } })
+      producerSourceIds.current.set('screen', producer.id);
+      producers.current.set(producer.id, producer);
+
+      console.log('producers.current', producers.current)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const toggleMic = async () => {
+    if (isMicOn) {
+      await muteMic()
+    } else {
+      await unMuteMic()
+    }
+    setIsMicOn(!isMicOn);
+  }
+
+  const unMuteMic = async () => {
+    console.log('unMuteMic')
+    if (!userPeer) return
+
+    try {
+      const userStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      if (!sendTransport.current) return;
+
+      dispatch(updatePeer({ ...peers[userPeer.id], mic: userStream }))
+
+      const producer = await sendTransport.current.produce({ track: userStream.getAudioTracks()[0], appData: { source: 'mic' } })
+      producerSourceIds.current.set('mic', producer.id);
+      producers.current.set(producer.id, producer);
+
+      console.log('producers.current', producers.current)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const muteMic = async () => {
+    console.log("OFF Camera")
+    if (!userPeer) return
+
+    peers[userPeer.id].mic?.getTracks().forEach(track => {
+      track.stop();
+    })
+    dispatch(updatePeer({ ...peers[userPeer.id], mic: undefined }))
+    // getProducer
+    console.log('producers.current', producers.current)
+    const producerId = producerSourceIds.current.get('mic');
+    if (!producerId) return
+
+    const producer = producers.current.get(producerId);
+    if (!producer) {
+      console.log("Producer was not found");
+      return
+    }
+    producers.current.delete(producer.id);
+    producer.close();
+    await emitRequest(SE.producerClosed, { producerId: producer.id })
+
+  }
+
+
+  const endCall = () => {
     if (!room) return
     window.location.pathname = room.id
   }
@@ -423,7 +592,7 @@ const Conference = () => {
 
         </div>
 
-        <ControlPanel />
+        <ControlPanel endCall={endCall} toggleCamera={toggleCamera} toggleMic={toggleMic} toggleScreen={toggleScreen} />
       </div>
     </div>
   )

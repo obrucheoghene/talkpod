@@ -9,9 +9,9 @@ interface MicButtonProps {
 const MicButton: React.FC<MicButtonProps> = ({toggleMic}) => {
   const {isMicOn} = useContext(RoomContext)
   return (
-    <Tooltip placement='top' title={isMicOn? "Unmute" : "Mute"}>
+    <Tooltip placement='top' title={!isMicOn? "Unmute" : "Mute"}>
     <div onClick={toggleMic} className={`rounded-full h-12 w-12 
-  flex flex-row items-center justify-center text-xl cursor-pointer ${isMicOn ? "bg-slate-800" : "bg-blue-700" }`}>{isMicOn ? <BsMicMuteFill/> : <BsMicFill/>}</div>
+  flex flex-row items-center justify-center text-xl cursor-pointer ${!isMicOn ? "bg-slate-800" : "bg-blue-700" }`}>{!isMicOn ? <BsMicMuteFill/> : <BsMicFill/>}</div>
     </Tooltip>
   )
 }

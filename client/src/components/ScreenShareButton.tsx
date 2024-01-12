@@ -12,9 +12,9 @@ const ScreenShareButton: React.FC<ScreenButtonProps> = ({toggleScreen}) => {
 
 
   return (
-    <Tooltip placement='top' title={isScreenShareOn? "Share your screen" : "Stop sharing your screen"}>
+    <Tooltip placement='top' title={!isScreenShareOn? "Share your screen" : "Stop sharing your screen"}>
     <div onClick={toggleScreen} className={`rounded-full h-12 w-12 
-  flex flex-row items-center justify-center text-xl cursor-pointer ${isScreenShareOn ? "bg-slate-800" : "bg-blue-700" }`}>{isScreenShareOn ? <MdStopScreenShare/> : <MdScreenShare/> }</div>
+  flex flex-row items-center justify-center text-xl cursor-pointer ${!isScreenShareOn ? "bg-slate-800" : "bg-blue-700" }`}>{!isScreenShareOn ? <MdStopScreenShare/> : <MdScreenShare/> }</div>
     </Tooltip>
   )
 }
