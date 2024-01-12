@@ -1,51 +1,15 @@
-import { Avatar, Card, } from 'antd'
-import { useEffect, useRef } from 'react';
+import { Card, } from 'antd'
 import { twMerge } from 'tailwind-merge';
+import { useAppSelector } from '../hooks/redux';
+import PeerCamera from './PeerCamera';
 
-const Participant = () => {
-    const videoRef = useRef<HTMLVideoElement>(null);
-    useEffect(() => {
-        const getCameraStream = async () => {
-            try {
-              const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      
-              if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-              }
-            } catch (error) {
-              console.error('Error accessing the camera:', error);
-            }
-          };
-      
-        //   getCameraStream();
-      
-          // Clean up the video stream when the component is unmounted
-          return () => {
-            if (videoRef.current) {
-              const stream = videoRef.current.srcObject as MediaStream;
-              if (stream) {
-                stream.getTracks().forEach((track) => track.stop());
-              }
-            }
-          };
-    }, [])
-    return (
-        <div
-        className="bg-neutral-800 rounded-md flex flex-col items-center justify-center"
-        style={{ aspectRatio: '16/9' }} // Maintain a 16:9 aspect ratio for each participant
-    >
-        {/* <Avatar size="large" className='h-20 w-20 flex justify-center items-center text-xl'>{1}</Avatar>
-         <p className='text-center'>Participant gletieo</p> */}
-         <video ref={videoRef} autoPlay playsInline muted className='w-full h-auto' />
-
-    </div>
-    )
-}
 
 const ActivityBoard = () => {
 
+  const peers = useAppSelector((state) => state.peers)
 
-    const participants = [1];
+
+    const peersList = Object.values(peers);
     const getGridClass = (count: number) => {
         if (count <= 2) {
           return 'grid-cols-1 grid-rows-1';
@@ -62,15 +26,15 @@ const ActivityBoard = () => {
       };
     
     // const responsiveGridClass = "grid-cols-1 grid-rows-1 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-3 lg:grid-rows-3 xl:grid-cols-4 xl:grid-rows-4";
-    const gridClass = getGridClass(participants.length);
+    const gridClass = getGridClass(peersList.length);
 
     return (
-        <Card size="small" className='flex-grow-1 flex flex-col bg-neutral-8d00 border-none text-white overflow-hidden'>
-            {/* <div className={twMerge(`grid ${gridClass} gap-2 max-h-full w`)}>
-                {participants.map((_participant, index) => (
-                    <Participant key={index}/>
+        <Card size="small" className='flex-grow-1 flex  flex-col bg-transparent border-none text-white overflow-hidden'>
+            <div className={twMerge(`grid ${gridClass} gap-2 max-h-full w`)}>
+                {peersList.map((peer) => (
+                    <PeerCamera key={peer.id} peer={peer}/>
                 ))}
-            </div> */}
+            </div>
         </Card>
     )
 }

@@ -3,7 +3,7 @@ import { useContext, useEffect, useRef } from 'react'
 import { Peer } from '../utils/types';
 import { Avatar, Card } from 'antd';
 import { getInitials } from '../utils/helpers';
-import { RoomContext } from '../context/RoomContext';
+import { RoomContext } from '../contexts/RoomContext';
 interface PeerCameraProps {
   peer: Peer,
 }
@@ -38,7 +38,7 @@ const PeerCamera: React.FC<PeerCameraProps> = ({ peer }) => {
 
   if (!peer.video) {
     return (
-      <Card className={`bg-neutral-900 border  text-white ${peer.mic ? 'border-blue-500' : 'border-neutral-900'}`}>
+      <Card className={`bg-neutral-800  max-h-full  text-white ${peer.mic ? 'border-blue-500' : 'border-neutral-800'}`}>
         {<audio ref={audioRef} muted={userPeer?.id === peer.id} />}
         <div className='flex justify-center h-24 items-center'>
           <Avatar size={64}>{getInitials(peer.name)}</Avatar>
@@ -48,11 +48,11 @@ const PeerCamera: React.FC<PeerCameraProps> = ({ peer }) => {
     )
   }
   return (
-    <Card className={`bg-neutral-900 border  text-white ${peer.mic ? 'border-blue-500' : 'border-neutral-900'}`}>
+    <Card className={`bg-neutral-800   text-white ${peer.mic ? 'border-blue-500' : 'border-neutral-800'} aspect-video`}>
       {peer.mic && <audio ref={audioRef} muted={userPeer?.id === peer.id} />}
 
-      <div className='flex justify-center h-24 items-center'>
-        <video className='h-full mx-auto w-auto' ref={videoRef} />
+      <div className='flex justify-center   items-center'>
+        <video className='h-96 mx-auto w-auto' ref={videoRef} />
       </div>
       <p className=' text-center'>{peer.name}</p>
     </Card>
