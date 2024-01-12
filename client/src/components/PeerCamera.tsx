@@ -38,7 +38,7 @@ const PeerCamera: React.FC<PeerCameraProps> = ({ peer }) => {
 
   if (!peer.video) {
     return (
-      <Card className={`bg-neutral-800  max-h-full  text-white ${peer.mic ? 'border-blue-500' : 'border-neutral-800'}`}>
+      <Card className={`bg-neutral-800 h-fit  text-white ${peer.mic ? 'border-blue-500' : 'border-neutral-800'}`}>
         {<audio ref={audioRef} muted={userPeer?.id === peer.id} />}
         <div className='flex justify-center h-24 items-center'>
           <Avatar size={64}>{getInitials(peer.name)}</Avatar>
@@ -48,7 +48,7 @@ const PeerCamera: React.FC<PeerCameraProps> = ({ peer }) => {
     )
   }
   return (
-    <Card className={`bg-neutral-800   text-white ${peer.mic ? 'border-blue-500' : 'border-neutral-800'} aspect-video`}>
+    <Card className={`bg-neutral-800 h-fit text-white ${peer.mic ? 'border-blue-500' : 'border-neutral-800'} aspect-video`}>
       {peer.mic && <audio ref={audioRef} muted={userPeer?.id === peer.id} />}
 
       <div className='flex justify-center   items-center'>

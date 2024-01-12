@@ -29,8 +29,8 @@ const ActivityBoard = () => {
     const gridClass = getGridClass(peersList.length);
 
     return (
-        <Card size="small" className='flex-grow-1 flex  flex-col bg-transparent border-none text-white overflow-hidden'>
-            <div className={twMerge(`grid ${gridClass} gap-2 max-h-full w`)}>
+        <Card size="small" className='flex-grow-1 flex bg-white flex-col border-none text-white '>
+            <div className={twMerge(`grid ${gridClass} gap-2 `)}>
                 {peersList.map((peer) => (
                     <PeerCamera key={peer.id} peer={peer}/>
                 ))}
