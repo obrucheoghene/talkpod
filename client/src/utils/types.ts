@@ -28,7 +28,8 @@ export interface Peer {
     id: string,
     name: string,
     video?: MediaStream,
-    audio?: MediaStream
+    screen?: MediaStream,
+    mic?: MediaStream
 }
 export interface Comment {
     message: string
@@ -52,10 +53,4 @@ export interface Chat {
     peerId: string,
     message: string
     peerName: string
-}
-
-export interface FeaturesType {
-    name: string,
-    iconClass: string,
-    description: string
 }
