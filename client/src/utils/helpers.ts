@@ -51,3 +51,14 @@ export const getRoomById = async (roomId: string): Promise<Room> => {
         throw error
     }
 }
+
+
+export const getPeerBoxSize = (peersLength: number ) => {
+    let size = '100%'
+    if (peersLength === 1) size = '100%';
+    if (peersLength > 1) size = '48%';
+    if (peersLength > 4) size = '32%';
+    if (peersLength > 9) size = '23%';
+    if (peersLength > 20) size = '18.5%';
+    return size;
+  }
