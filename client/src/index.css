@@ -46,6 +46,132 @@ body {
   animation-iteration-count: infinite;
 }
 
+
+.participantBoxContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+  /* background-color: #221F1F; */
+  overflow-y: hidden;
+  overflow-x: hidden;
+  padding: 0;
+  aspect-ratio: 16 / 9 ;
+  max-width: 100%;
+}
+
+
+.peerContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* flex-wrap: wrap; */
+  padding: 0;
+  max-width: 100%;
+  /* flex-basis: 250px; */
+  border-radius: 10px;
+  background-color: #f2f2f2;
+  /* flex-grow: 1; */
+  min-height: 100px;
+
+  /* aspect-ratio: 16/9; */
+  overflow: hidden;
+
+}
+
+
+.peerContainer:hover > .pinHoverContainer {
+  display: flex;
+}
+
+
+.pinContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.pinHoverContainer {
+  display: none;
+}
+
+
+.avatar {
+  width: 100%;
+  height: auto;
+}
+
+.cameraVideo {
+  width: 100%;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  /* object-fit: 'cover'; */
+  /* max-height: 100%; */
+  /* position: unset; */
+  /* overflow: hidden; */
+  /* border-radius: 10px; */
+}
+
+.screenVideo {
+  width: 100%;
+  object-fit: 'contain';
+}
+
+.video {
+  width: 100%;
+
+}
+
+.pinIcon {
+  cursor: pointer;
+  height: 50px;
+}
+
+.cameraIcon {
+  cursor: pointer;
+  height: 1rem;
+}
+
+.userStatusContainer {
+  display: flex;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  align-items: center;
+  gap: 2px;
+  background-color: rgba(255, 255, 255, 0.436);
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  padding: 2px;
+  padding-right: 4px;
+  height: auto;
+  max-width: 50%;
+}
+
+.username {
+  font-size: 12.5px;
+  font-style: normal;
+  font-weight: 400;
+  color: #333;
+  font-family: 'inter';
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.you {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  color: #333;
+  font-family: 'inter';
+}
+  
+
+
 @keyframes loading-text {
   0% {
     content: "";
