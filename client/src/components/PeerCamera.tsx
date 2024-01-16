@@ -7,7 +7,6 @@ import { RoomContext } from '../contexts/RoomContext';
 interface PeerCameraProps {
   peer: Peer,
   size?: string,
-
 }
 const PeerCamera: React.FC<PeerCameraProps> = ({ peer, size }) => {
   const { userPeer } = useContext(RoomContext);
@@ -36,28 +35,29 @@ const PeerCamera: React.FC<PeerCameraProps> = ({ peer, size }) => {
     }
   }, [peer.mic])
 
-  if (!peer.video) {
-    return (
-      <div style={{ height: size}} className={`bg-neutral-800 w-full aspect-video border flex justify-center items-center rounded-lg text-white ${peer.mic ? 'border-blue-500' : 'border-neutral-800'}`}>
-        {<audio ref={audioRef} muted={userPeer?.id === peer.id} />}
-        <div className='flex justify-center h-24 items-center'>
-          <Avatar size={100}>{getInitials(peer.name)}</Avatar>
-        </div>
-        <p className=' text-center'>{peer.name}</p>
-      </div>
-    )
+
+  const updateContainerStyle = {
+    // maxHeight: peer.isVideoPinned ? '100%' : size,
+    height: size,
+    // maxHeight: size,
+    // backgroundColor: bg,
+
   }
+
   return (
-    <div style={{ height: size}} className={`bg-neutral-800 w-full aspect-video border flex justify-center items-center rounded-lg text-white ${peer.mic ? 'border-blue-500' : 'border-neutral-800'}`}>
-    {peer.mic && <audio ref={audioRef} muted={userPeer?.id === peer.id} />}
-
-      {/* <div className='flex justify-center   items-center'> */}
-        <video className='aspect-video mx-auto w-auto' ref={videoRef} />
-      {/* </div> */}
-      {/* <p className=' text-center'>{peer.name}</p> */}
+    <div className='peerContainer' style={{ ...updateContainerStyle }}>
+      {<audio ref={audioRef} muted={userPeer?.id === peer.id} />}
+      {
+        peer.video ?
+          <video className='cameraVideo' ref={videoRef}  />
+          : <Avatar size={64}> {getInitials(peer.name)}</Avatar>
+      }
+      <div className='userStatusContainer'>
+        <span className='username'>{`${peer.name}`}</span>
+        <span className='you'>{userPeer?.id === peer.id ? '(You)' : ''}</span>
+      </div>
     </div>
-
-  )
+  );
 }
 
 export default PeerCamera;
