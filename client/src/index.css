@@ -815,3 +815,14 @@ p{
 		top: 57%;
 	}
 }
+
+
+@keyframes audioLightPulse {
+  0% {
+      box-shadow: 0 0 0 0px rgba(150, 150, 150, 0.2);
+  }
+
+  100% {
+      box-shadow: 0 0 0 70px #96969600;
+  }
+}

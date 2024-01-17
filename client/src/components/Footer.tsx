@@ -2,7 +2,7 @@
 const Footer = () => {
   return (
     <footer>
-    talkpod &reg; 2023 &copy; Copyright. All rights reserved
+    talkpod &reg; 2024 &copy; Copyright. All rights reserved
   </footer>
   )
 }

@@ -591,7 +591,7 @@ const Conference = () => {
   return (
     <div className='bg-neutral-900 h-screen flex  py-2  overflow-y-hidden'>
       <div className=" container mx-auto flex flex-col justify-between text-white  overflow-hidden">
-        <div className=' text-center '>{room?.name}</div>
+        <div className=' text-center text-xl '>{room?.name}</div>
         <div className="flex-grow-1 flex flex-row overflow-hidden gap-x-4 my-2  ">
 
           <ActivityBoard />
