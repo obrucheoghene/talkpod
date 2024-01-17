@@ -52,6 +52,16 @@ export const getRoomById = async (roomId: string): Promise<Room> => {
     }
 }
 
+export const getUserByRoomId = async (roomId: string) => {
+    try {
+        const response = await Axios.get(`/rooms/${roomId}/owner`);
+        const user = response.data;
+        return user;
+    } catch (error) {
+        console.log(error);
+        throw error
+    }
+}
 
 export const getPeerBoxSize = (peersLength: number ) => {
     let size = '100%'

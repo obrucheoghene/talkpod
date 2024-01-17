@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useEffect, useRef, useState } from 'react'
 import ActivityBoard from '../components/ActivityBoard'
-import ChatPanel from '../components/ChatPanel'
 import ControlPanel from '../components/ControlPanel'
-import ParticipantPanel from '../components/ParticipantPanel'
 import { Device, types as mediasoupTypes  } from 'mediasoup-client'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Peer, Room as RoomValue } from '../utils/types';
@@ -12,13 +10,15 @@ import { RoomContext } from '../contexts/RoomContext'
 import { SOCKET_EVENT_TYPES as SE } from '../utils/constants';
 import { useAppDispatch, useAppSelector } from '../hooks/redux'
 import { addPeer, removePeer, updatePeer } from '../reducers/peerSlice'
+import PeersDrawer from '../components/PeersDrawer'
+import ChatsDrawer from '../components/ChatsDrawer'
 
 // import ParticipantPanel from '../components/ParticipantPanel'
 // import ChatPanel from '../components/ChatPanel'
 // import ActivityBoard from '../components/ActivityBoard'
 
 const Conference = () => {
-  const { ws, isCameraOn, userPeer, isMicOn, setIsMicOn, setIsCameraOn, isScreenShareOn, setIsScreenShareOn } = useContext(RoomContext);
+  const { ws, isCameraOn, userPeer, isMicOn, setIsMicOn, setIsCameraOn, isScreenShareOn, showChat, setShowChat, showParticipant,  setShowParticipant, setIsScreenShareOn } = useContext(RoomContext);
   // // const { user } = useContext(AuthContext);
   const [room, setRoom] = useState<RoomValue>()
   const navigate = useNavigate()
@@ -34,7 +34,16 @@ const Conference = () => {
   const producerSourceIds = useRef<Map<string, string>>(new Map())
   const dispatch = useAppDispatch();
   const peers = useAppSelector((state) => state.peers)
-  // const chats = useAppSelector((state) => state.chats)
+  const chats = useAppSelector((state) => state.chats)
+
+
+  const togglePeersDrawer = () => {
+    setShowParticipant(prev => !prev)
+  }
+  const toggleChatsDrawer = () => {
+    setShowChat(prev => !prev)
+  }
+
 
   const toggleCamera = async () => {
     if (isCameraOn) {
@@ -584,16 +593,17 @@ const Conference = () => {
       <div className=" container mx-auto flex flex-col justify-between text-white  overflow-hidden">
         <div className=' text-center '>{room?.name}</div>
         <div className="flex-grow-1 flex flex-row overflow-hidden gap-x-4 my-2  ">
-          <ParticipantPanel />
 
           <ActivityBoard />
 
-          <ChatPanel />
 
         </div>
 
         <ControlPanel endCall={endCall} toggleCamera={toggleCamera} toggleMic={toggleMic} toggleScreen={toggleScreen} />
       </div>
+
+      <PeersDrawer open={showParticipant} onClose={togglePeersDrawer} peers={Object.values(peers)}/>
+      <ChatsDrawer open={showChat} onClose={toggleChatsDrawer} chats={chats}/>
     </div>
   )
 }

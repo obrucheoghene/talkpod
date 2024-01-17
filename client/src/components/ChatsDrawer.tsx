@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {Drawer, Input, Card } from 'antd'
 import { Chat } from '../utils/types'
 import { useContext, useEffect, useState } from 'react'
 import { SOCKET_EVENT_TYPES as SE } from '../utils/constants'
-import { RoomContext } from '../context/RoomContext'
 import { useAppDispatch } from '../hooks/redux'
 import { addChat } from '../reducers/chatSlice'
+import { RoomContext } from '../contexts/RoomContext'
 
 interface ChatsDrawerProps {
   open: boolean,

@@ -1,9 +1,9 @@
 import Navbar from "../components/Navbar";
-import { useContext, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Room as RoomType } from "../utils/types";
-import { getRoomById, getUserRooms } from "../utils/helpers";
+import { getRoomById, getUserByRoomId, getUserRooms } from "../utils/helpers";
 import { Alert, Card, Input, Spin } from "antd";
 // import {HiHome} from "react-icons/hi2"
 import { BsLink45Deg } from "react-icons/bs"
@@ -11,6 +11,7 @@ import Title from "antd/es/typography/Title";
 import ActionButton from "../components/ActionButton";
 import { IoAddCircle } from "react-icons/io5";
 import { RoomContext } from "../contexts/RoomContext";
+import { v4 as uuidV4 } from 'uuid';
 
 const Room = () => {
   const { user, } = useContext(AuthContext);
@@ -23,6 +24,9 @@ const Room = () => {
   const [loading, setLoading] = useState(true);
   const [room, setRoom] = useState<RoomType>()
   const [userRooms, setUserRooms] = useState<RoomType[]>([])
+  const [roomUserName, setRoomUserName] = useState("");
+  const [inviteeName, setInviteeName] = useState(user?.data.name || "")
+
 
   useEffect(() => {
     const getData = async () => {
@@ -32,12 +36,16 @@ const Room = () => {
 
 
         if (user) {
-
-          const userRooms = await getUserRooms(user.data.id);
-          setUserRooms(userRooms)
-          console.log('userRooms', userRooms)
           setUserPeer(user.data)
+          if (user.data.id === room.userId) {
+            const userRooms = await getUserRooms(user.data.id);
+            setUserRooms(userRooms)
+          }
+
         }
+
+        const roomUser = await getUserByRoomId(roomId as string);
+        setRoomUserName(roomUser.name);
       } catch (error) {
         console.log(error);
       }
@@ -62,12 +70,58 @@ const Room = () => {
     }
   }
 
+  const handleNameChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    setInviteeName(e.target.value)
+  }
+
+
+  const joinMeeting = () => {
+    if (inviteeName.trim() === "") {
+      return;
+    }
+    if (user) {
+      setUserPeer({
+        id: user.data.id,
+        name: user.data.name
+      })
+    } else {
+      setUserPeer({
+        id: uuidV4(),
+        name: inviteeName
+      })
+    }
+    navigate(`/${roomId}/join`)
+  }
+
+
   if (loading) {
     return <Spin />
   }
 
   if (loading && !room) {
     return <Alert showIcon type="error" message="This room does not exist" />
+  }
+
+
+  if (!user || user.data.id !== room?.userId) {
+    return (
+      <div>
+        <Navbar />
+        <div className='container flex flex-col gap-y-3 '>
+          <div className=' flex flex-col gap-y-2'>
+            <span>You have been invited to join </span>
+            <h1 className=' text-xl font-semibold'>{room?.name}</h1>
+            <span>(Host: {roomUserName})</span>
+          </div>
+
+          <div className=' flex gap-x-3 max-w-[600px]'>
+            <Input placeholder='Enter your name ' onChange={handleNameChange} value={inviteeName} />
+            <button className=' whitespace-nowrap bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded' onClick={joinMeeting}>Join</button>
+          </div>
+
+        </div>
+      </div>
+    )
   }
 
   return (

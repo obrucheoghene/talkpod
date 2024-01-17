@@ -4,6 +4,7 @@ import { Peer } from '../utils/types';
 import { Avatar,  } from 'antd';
 import { getInitials } from '../utils/helpers';
 import { RoomContext } from '../contexts/RoomContext';
+import { BsMicFill, BsMicMuteFill } from 'react-icons/bs';
 interface PeerCameraProps {
   peer: Peer,
   size?: string,
@@ -53,6 +54,7 @@ const PeerCamera: React.FC<PeerCameraProps> = ({ peer, size }) => {
           : <Avatar size={64}> {getInitials(peer.name)}</Avatar>
       }
       <div className='userStatusContainer'>
+      {peer.mic ? <BsMicFill/> : <BsMicMuteFill/>}
         <span className='username'>{`${peer.name}`}</span>
         <span className='you'>{userPeer?.id === peer.id ? '(You)' : ''}</span>
       </div>

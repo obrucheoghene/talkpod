@@ -1,5 +1,6 @@
 import {Drawer, List} from 'antd'
 import { Peer } from '../utils/types'
+import { BsMicFill, BsMicMuteFill } from 'react-icons/bs'
 
 interface PeersDrawerProps {
   open: boolean,
@@ -14,7 +15,7 @@ const PeersDrawer:React.FC<PeersDrawerProps> = ({open, onClose, peers}) => {
       size="small"
       bordered
       dataSource={peers}
-      renderItem={(peer) => <List.Item>{peer.name}</List.Item>}
+      renderItem={(peer) => <List.Item className=' flex flex-row '><span className=' inline-flex'>{peer.mic ? <BsMicFill className=' text-blue-700'/> : <BsMicMuteFill/>}</span> <span>{peer.name}</span></List.Item>}
     />
 
     </Drawer>

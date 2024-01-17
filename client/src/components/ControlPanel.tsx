@@ -19,8 +19,8 @@ const ControlPanel: React.FC<ControlPanelProps> = ({toggleCamera, toggleMic, tog
 
         <div className=' flex flex-row items-center justify-between gap-x-5'>
           <MicButton toggleMic={toggleMic}/>
-          <CameraButton toggleCamera={toggleCamera}/>
-          <ScreenShareButton toggleScreen={toggleScreen}/>
+          {/* <CameraButton toggleCamera={toggleCamera}/>
+          <ScreenShareButton toggleScreen={toggleScreen}/> */}
           <EndCallButton handleEnd={endCall}/>
         </div>
 
