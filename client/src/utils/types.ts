@@ -54,3 +54,9 @@ export interface Chat {
     message: string
     peerName: string
 }
+
+export interface FeaturesType {
+    name: string,
+    iconClass: string,
+    description: string
+}

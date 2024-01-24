@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 
-import ProtectedRoute from "../middlewares/ProtectedRoute";
+// import ProtectedRoute from "../middlewares/ProtectedRoute";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import Landing from "../pages/Landing";
@@ -14,7 +14,7 @@ interface RouteType {
 }
 
 
-const routes = (isAuthenticated: boolean):RouteType[] => [
+const routes = ():RouteType[] => [
     {
       path: '/',
       element: <Landing />

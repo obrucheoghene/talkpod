@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/redux'
 import { addPeer, removePeer, updatePeer } from '../reducers/peerSlice'
 import PeersDrawer from '../components/PeersDrawer'
 import ChatsDrawer from '../components/ChatsDrawer'
+import Room from './Room'
 
 // import ParticipantPanel from '../components/ParticipantPanel'
 // import ChatPanel from '../components/ChatPanel'
@@ -580,13 +581,17 @@ const Conference = () => {
     });
   }
 
-  if (!isReady) {
-    return (<h1>Loading</h1>)
+  if (!userPeer) {
+    return <Room/>
   }
 
-  if (!userPeer) {
-    return (<h1>Loading</h1>)
+
+  if (!isReady) {
+    return (<div className='bg-neutral-900 h-screen flex justify-center items-center  py-2  overflow-y-hidden'>
+        <span className=' text-white text-3xl'>Joining...</span>
+       </div>)
   }
+
 
   return (
     <div className='bg-neutral-900 h-screen flex  py-2  overflow-y-hidden'>
